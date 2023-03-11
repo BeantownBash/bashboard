@@ -7,7 +7,12 @@ module.exports = {
         './components/**/*.{js,ts,jsx,tsx}',
     ],
     theme: {
+        fontFamily: {
+            sans: ['var(--font-inter)', 'sans-serif'],
+            display: ['var(--font-epilogue)', 'sans-serif'],
+        },
         extend: {},
     },
+    darkMode: 'class',
     plugins: [require('flowbite/plugin')],
 };
