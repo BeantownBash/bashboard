@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
+import { Year } from '@prisma/client';
 import { authOptions } from '../auth/[...nextauth]';
 import prisma from '@/lib/prisma';
-import { Year } from '@prisma/client';
 import { generateRandomKey } from '@/lib/utils';
 
 export default async function handler(
@@ -71,10 +71,10 @@ export default async function handler(
                     },
                     ballots: {
                         createMany: {
-                            data: ballotUsers.map((user) => ({
-                                userId: user.id,
+                            data: ballotUsers.map((ballotUser) => ({
+                                userId: ballotUser.id,
                                 securityKey: generateRandomKey(),
-                                projectId: user.projectId as string,
+                                projectId: ballotUser.projectId as string,
                             })),
                         },
                     },
@@ -82,12 +82,11 @@ export default async function handler(
             });
         } else {
             // delete old ballots
-            console.log(ballotUsers);
             await prisma.ballot.deleteMany({
                 where: {
                     voteId: req.body.id,
                     userId: {
-                        notIn: ballotUsers.map((user) => user.id),
+                        notIn: ballotUsers.map((ballotUser) => ballotUser.id),
                     },
                 },
             });
@@ -112,10 +111,10 @@ export default async function handler(
                     },
                     ballots: {
                         createMany: {
-                            data: ballotUsers.map((user) => ({
-                                userId: user.id,
+                            data: ballotUsers.map((ballotUser) => ({
+                                userId: ballotUser.id,
                                 securityKey: generateRandomKey(),
-                                projectId: user.projectId as string,
+                                projectId: ballotUser.projectId as string,
                             })),
                             skipDuplicates: true,
                         },

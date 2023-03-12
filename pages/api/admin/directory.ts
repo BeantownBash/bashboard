@@ -31,7 +31,6 @@ export default async function handler(
         }
 
         if (req.body.value !== false && req.body.value !== true) {
-            console.log(req.body);
             res.status(400).json({
                 e: 'Bad Request: No body provided.',
             });

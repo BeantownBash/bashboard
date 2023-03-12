@@ -1,16 +1,14 @@
-import Button from '@/components/Button';
-import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
-import prisma from '@/lib/prisma';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { PostData } from '@/types/PostData';
-import { Post } from '@prisma/client';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { BsDashCircleFill, BsSave } from 'react-icons/bs';
+import { PostData } from '@/types/PostData';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import prisma from '@/lib/prisma';
+import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
+import Button from '@/components/Button';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getServerSession(
@@ -63,7 +61,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function Edit({ post }: { post?: PostData }) {
-    console.log(post);
     const [title, setTitle] = React.useState(post?.title ?? '');
     const [slug, setSlug] = React.useState(post?.slug ?? '');
     const [content, setContent] = React.useState(post?.content ?? '');

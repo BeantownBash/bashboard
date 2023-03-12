@@ -1,14 +1,12 @@
-import Button from '@/components/Button';
-import prisma from '@/lib/prisma';
-import { BasicUserData } from '@/types/UserData';
-import { User } from '@prisma/client';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { BsArrowRight } from 'react-icons/bs';
+import { BasicUserData } from '@/types/UserData';
+import prisma from '@/lib/prisma';
+import Button from '@/components/Button';
 import { authOptions } from './api/auth/[...nextauth]';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -74,7 +72,7 @@ export default function Account({ user }: { user: BasicUserData }) {
             await axios.post('/api/account', { name });
             router.push('/');
         } catch (error) {
-            console.log(error);
+            console.error(error);
             alert('Something went wrong. Please try again later.');
         }
     };

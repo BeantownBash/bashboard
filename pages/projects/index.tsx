@@ -1,22 +1,13 @@
-import Button from '@/components/Button';
-import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
-import prisma from '@/lib/prisma';
-import { PostData } from '@/types/PostData';
-import { LightProjectData } from '@/types/ProjectData';
-import { Post } from '@prisma/client';
 import { GetServerSideProps } from 'next';
-import Link from 'next/link';
-import {
-    BsChevronRight,
-    BsGithub,
-    BsLink45Deg,
-    BsYoutube,
-} from 'react-icons/bs';
+import { BsGithub, BsLink45Deg, BsYoutube } from 'react-icons/bs';
 import Image from 'next/image';
-import { selectRandomPlaceholder } from '@/lib/utils';
 import { useRouter } from 'next/router';
+import Button from '@/components/Button';
+import prisma from '@/lib/prisma';
+import { LightProjectData } from '@/types/ProjectData';
+import { selectRandomPlaceholder } from '@/lib/utils';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
+export const getServerSideProps: GetServerSideProps = async () => {
     const projects = await prisma.project.findMany({
         include: {
             logo: true,
@@ -70,7 +61,8 @@ export default function Projects({
                 projects.length > 0 ? (
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         {projects.map((project) => (
-                            <div
+                            <button
+                                type="button"
                                 className="flex cursor-pointer flex-col items-stretch justify-center gap-4 rounded-lg border border-zinc-400 bg-zinc-700 px-4 py-4 transition-shadow hover:shadow-lg hover:shadow-zinc-400/20"
                                 key={project.id}
                                 onClick={() => {
@@ -156,7 +148,7 @@ export default function Projects({
                                         )}
                                     </div>
                                 )}
-                            </div>
+                            </button>
                         ))}
                     </div>
                 ) : (

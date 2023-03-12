@@ -1,9 +1,3 @@
-import Button from '@/components/Button';
-import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
-import prisma from '@/lib/prisma';
-import { selectRandomPlaceholder } from '@/lib/utils';
-import { ProjectData, TeamInviteDataWithProject } from '@/types/ProjectData';
-import { BasicUserData } from '@/types/UserData';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
@@ -23,6 +17,12 @@ import {
     BsX,
     BsYoutube,
 } from 'react-icons/bs';
+import { BasicUserData } from '@/types/UserData';
+import { ProjectData, TeamInviteDataWithProject } from '@/types/ProjectData';
+import { selectRandomPlaceholder } from '@/lib/utils';
+import prisma from '@/lib/prisma';
+import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
+import Button from '@/components/Button';
 import { authOptions } from './api/auth/[...nextauth]';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -127,7 +127,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Home({
     loggedIn,
     invites,
-    user,
     project,
 }: {
     loggedIn: boolean;
@@ -146,6 +145,7 @@ export default function Home({
                 </h1>
 
                 <button
+                    type="button"
                     onClick={() => {
                         signIn(undefined, { callbackUrl: '/welcome' });
                     }}
@@ -215,6 +215,7 @@ export default function Home({
 
                 {!teamLoading ? (
                     <button
+                        type="button"
                         onClick={createProject}
                         className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-emerald-700 px-8 py-8 text-2xl font-medium hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-400"
                     >
@@ -222,7 +223,10 @@ export default function Home({
                         Create a Project
                     </button>
                 ) : (
-                    <button className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-emerald-700 px-8 py-8 text-2xl font-medium hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-400">
+                    <button
+                        type="button"
+                        className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-emerald-700 px-8 py-8 text-2xl font-medium hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-400"
+                    >
                         <BsArrowClockwise className="mr-4 inline-block h-8 w-8" />
                         Loading...
                     </button>
@@ -280,7 +284,7 @@ export default function Home({
         );
     }
 
-    let members: React.ReactNode[] = [];
+    const members: React.ReactNode[] = [];
     project.members.forEach((member, index) => {
         if (index > 0) {
             if (index === project.members.length - 1) {

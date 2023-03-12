@@ -1,12 +1,12 @@
-import Button from '@/components/Button';
-import prisma from '@/lib/prisma';
-import { ProjectData } from '@/types/ProjectData';
 import Link from 'next/link';
 import { BsGithub, BsLink45Deg, BsYoutube } from 'react-icons/bs';
 import Image from 'next/image';
+import { GetServerSideProps } from 'next';
+import Button from '@/components/Button';
+import prisma from '@/lib/prisma';
+import { ProjectData } from '@/types/ProjectData';
 import { selectRandomPlaceholder } from '@/lib/utils';
 import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
-import { GetServerSideProps } from 'next';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { id } = context.query;
@@ -70,7 +70,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function Project({ project }: { project: ProjectData }) {
-    let members: React.ReactNode[] = [];
+    const members: React.ReactNode[] = [];
     project.members.forEach((member, index) => {
         if (index > 0) {
             if (index === project.members.length - 1) {

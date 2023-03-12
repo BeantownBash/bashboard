@@ -22,17 +22,18 @@ const buttonStyles: Record<ButtonType, string> = {
     admin: 'bg-indigo-700 hover:bg-indigo-800 focus:ring-indigo-400',
 };
 
-const Button: React.FC<any> = (props: {
-    className: string;
-    colorType: ButtonType;
-    alignedLeft: boolean;
-    fullWidth: boolean;
-}) => {
+export default function Button(props: {
+    className?: string;
+    colorType?: ButtonType;
+    alignedLeft?: boolean;
+    fullWidth?: boolean;
+    [key: string]: any;
+}) {
     const {
         className,
         colorType = 'primary',
-        alignedLeft,
-        fullWidth,
+        alignedLeft = false,
+        fullWidth = false,
         ...other
     } = props;
 
@@ -47,6 +48,4 @@ const Button: React.FC<any> = (props: {
             {...other}
         />
     );
-};
-
-export default Button;
+}

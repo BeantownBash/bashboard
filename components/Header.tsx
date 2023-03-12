@@ -1,13 +1,13 @@
 import { BsList, BsPersonCircle } from 'react-icons/bs';
 import Image from 'next/image';
-import logo from '@/public/logo.svg';
 import React from 'react';
-import Button from './Button';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { signIn, useSession } from 'next-auth/react';
+import logo from '@/public/logo.svg';
+import Button from './Button';
 
-const Header = () => {
+export default function Header() {
     const [menuOpen, setMenuOpen] = React.useState(false);
 
     const router = useRouter();
@@ -21,7 +21,7 @@ const Header = () => {
                         className="mr-5 h-16 w-12"
                         src={logo}
                         width={100}
-                        alt={''}
+                        alt=""
                     />
                     <span className="self-center whitespace-nowrap font-display text-2xl font-bold ">
                         Bashboard
@@ -125,6 +125,4 @@ const Header = () => {
             </div>
         </nav>
     );
-};
-
-export default Header;
+}

@@ -1,26 +1,14 @@
-import Button from '@/components/Button';
-import IndeterminateCheckbox, {
-    CheckboxState,
-} from '@/components/IndeterminateCheckbox';
-import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
-import prisma from '@/lib/prisma';
-import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { PostData } from '@/types/PostData';
-import { BasicProjectData } from '@/types/ProjectData';
-import { VoteData, VoteDataWithBallotsAndKeys } from '@/types/VoteData';
-import { Post } from '@prisma/client';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
-import {
-    BsClipboard,
-    BsDashCircleFill,
-    BsPencil,
-    BsSave,
-} from 'react-icons/bs';
+import { BsClipboard, BsDashCircleFill, BsPencil } from 'react-icons/bs';
+import Button from '@/components/Button';
+import prisma from '@/lib/prisma';
+import { authOptions } from '@/pages/api/auth/[...nextauth]';
+import { VoteDataWithBallotsAndKeys } from '@/types/VoteData';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { id } = context.query;
@@ -59,7 +47,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
 
-    let vote = await prisma.vote.findUnique({
+    const vote = await prisma.vote.findUnique({
         where: { id },
         include: {
             canVote: {

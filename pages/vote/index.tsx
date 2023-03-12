@@ -1,13 +1,9 @@
-import Button from '@/components/Button';
-import prisma from '@/lib/prisma';
-import { PostData } from '@/types/PostData';
-import { BasicUserData } from '@/types/UserData';
-import { SimpleBallot } from '@/types/VoteData';
-import { Post } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
-import { BsChevronRight, BsPencil, BsPlusCircle } from 'react-icons/bs';
+import Button from '@/components/Button';
+import prisma from '@/lib/prisma';
+import { SimpleBallot } from '@/types/VoteData';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -125,9 +121,7 @@ export default function Votes({ ballots }: { ballots: SimpleBallot[] }) {
                     })}
                 </div>
             ) : (
-                <>
-                    <p className="mb-4">No votes yet. 🥲</p>
-                </>
+                <p className="mb-4">No votes yet. 🥲</p>
             )}
         </div>
     );

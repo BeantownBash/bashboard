@@ -1,10 +1,9 @@
 import { BsCameraFill, BsDashCircleFill } from 'react-icons/bs';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
-import { compress } from '@/lib/fileutils';
 import React from 'react';
 import Image from 'next/image';
-import Button from './Button';
+import { compress } from '@/lib/fileutils';
 
 export default function ImageDropzone({
     url,
@@ -75,7 +74,7 @@ export default function ImageDropzone({
             try {
                 await axios.post(deleteUrl);
                 setImgUrl(null);
-            } catch (e) {
+            } catch (error) {
                 alert('Error deleting image. Please try again later.');
             }
         }

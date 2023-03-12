@@ -1,13 +1,11 @@
-import Button from '@/components/Button';
-import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
-import prisma from '@/lib/prisma';
-import { PostData } from '@/types/PostData';
-import { BasicUserData } from '@/types/UserData';
-import { Post } from '@prisma/client';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { BsChevronRight, BsPencil } from 'react-icons/bs';
+import Button from '@/components/Button';
+import prisma from '@/lib/prisma';
+import { PostData } from '@/types/PostData';
+import { BasicUserData } from '@/types/UserData';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

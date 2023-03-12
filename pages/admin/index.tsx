@@ -1,14 +1,10 @@
-import Button from '@/components/Button';
-import prisma from '@/lib/prisma';
-import { BasicUserData } from '@/types/UserData';
-import { User } from '@prisma/client';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
-import { signOut } from 'next-auth/react';
-import { useRouter } from 'next/router';
 import React from 'react';
-import { BsBoxArrowLeft, BsDashCircleFill, BsSave } from 'react-icons/bs';
+import { BsSave } from 'react-icons/bs';
+import prisma from '@/lib/prisma';
+import Button from '@/components/Button';
 import { authOptions } from '../api/auth/[...nextauth]';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -69,7 +65,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             allowEditing: allowEditing?.value ?? true,
             directoryEnabled: directoryEnabled?.value ?? true,
             allowedUsers: allowedUsers?.value ?? [],
-            adminUsers: adminUsers.map((user) => user.email),
+            adminUsers: adminUsers.map((adminUser) => adminUser.email),
         },
     };
 };
@@ -114,7 +110,7 @@ export default function Admin({
                 adminUsersSetting.split('\n').map((el) => el.trim()),
             );
         } catch (error: any) {
-            console.log(error);
+            console.error(error);
             alert(
                 `Something went wrong setting admins. ${error.response.data.e}`,
             );
@@ -126,7 +122,7 @@ export default function Admin({
                 allowedUsersSetting.split('\n').map((el) => el.trim()),
             );
         } catch (error: any) {
-            console.log(error);
+            console.error(error);
             alert(
                 `Something went wrong setting users. ${error.response.data.e}`,
             );
@@ -137,7 +133,7 @@ export default function Admin({
                 value: directoryEnabledSetting,
             });
         } catch (error: any) {
-            console.log(error);
+            console.error(error);
             alert(
                 `Something went wrong setting directory enabled. ${error.response.data.e}`,
             );
@@ -148,7 +144,7 @@ export default function Admin({
                 value: allowEditingSetting,
             });
         } catch (error: any) {
-            console.log(error);
+            console.error(error);
             alert(
                 `Something went wrong setting editing enabled. ${error.response.data.e}`,
             );

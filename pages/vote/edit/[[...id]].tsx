@@ -1,21 +1,17 @@
+import axios from 'axios';
+import { GetServerSideProps } from 'next';
+import { getServerSession } from 'next-auth';
+import { useRouter } from 'next/router';
+import React from 'react';
+import { BsDashCircleFill, BsSave } from 'react-icons/bs';
 import Button from '@/components/Button';
 import IndeterminateCheckbox, {
     CheckboxState,
 } from '@/components/IndeterminateCheckbox';
-import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
 import prisma from '@/lib/prisma';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
-import { PostData } from '@/types/PostData';
 import { BasicProjectData } from '@/types/ProjectData';
 import { VoteData } from '@/types/VoteData';
-import { Post } from '@prisma/client';
-import axios from 'axios';
-import { GetServerSideProps } from 'next';
-import { getServerSession } from 'next-auth';
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-import React from 'react';
-import { BsDashCircleFill, BsSave } from 'react-icons/bs';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getServerSession(

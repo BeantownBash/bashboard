@@ -1,8 +1,8 @@
 import { SessionProvider } from 'next-auth/react';
 import { AppProps } from 'next/app';
 import Head from 'next/head';
-import Header from '@/components/Header';
 import { Inter, Epilogue, Roboto_Mono } from '@next/font/google';
+import Header from '@/components/Header';
 import './globals.css';
 import './markdownstyles.css';
 
@@ -13,7 +13,7 @@ const robotoMono = Roboto_Mono({
     variable: '--font-roboto-mono',
 });
 
-const App = ({ Component, pageProps }: AppProps) => {
+function App({ Component, pageProps }: AppProps) {
     return (
         <>
             <Head>
@@ -50,7 +50,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                     href="/safari-pinned-tab.svg?v=1"
                     color="#00919e"
                 />
-                <link rel="shortcut icon" href="/favicon.ico?v=1" />
+                <link rel="icon" href="/favicon.ico?v=1" />
                 <meta name="msapplication-TileColor" content="#00919e" />
                 <meta name="theme-color" content="#00919e" />
             </Head>
@@ -64,6 +64,6 @@ const App = ({ Component, pageProps }: AppProps) => {
             </SessionProvider>
         </>
     );
-};
+}
 
 export default App;

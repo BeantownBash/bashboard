@@ -1,4 +1,3 @@
-import Button from '@/components/Button';
 import {
     BsGithub,
     BsLink45Deg,
@@ -7,17 +6,17 @@ import {
     BsYoutube,
 } from 'react-icons/bs';
 import React from 'react';
-import ImageDropzone from '@/components/ImageDropzone';
-import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
-import { generateRandomKey } from '@/lib/utils';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
+import { generateRandomKey } from '@/lib/utils';
+import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
+import ImageDropzone from '@/components/ImageDropzone';
+import Button from '@/components/Button';
 import prisma from '@/lib/prisma';
 import { authOptions } from './api/auth/[...nextauth]';
 import { ProjectDataWithInvites } from '@/types/ProjectData';
-import { BasicUserData } from '@/types/UserData';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getServerSession(
@@ -254,8 +253,8 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
             });
     };
 
-    const teamMembers = [];
-    for (const member of project.members) {
+    const teamMembers: any[] = [];
+    project.members.forEach((member) => {
         teamMembers.push(
             <div
                 key={member.id}
@@ -264,8 +263,8 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
                 {member.name}
             </div>,
         );
-    }
-    for (const invite of project.invites) {
+    });
+    project.invites.forEach((invite) => {
         teamMembers.push(
             <div
                 key={invite.id}
@@ -274,8 +273,8 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
                 {invite.user.name} (Invited)
             </div>,
         );
-    }
-    for (const invite of addedInvites) {
+    });
+    addedInvites.forEach((invite) => {
         teamMembers.push(
             <div
                 key={invite.id}
@@ -284,7 +283,7 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
                 {invite.name} (Invited)
             </div>,
         );
-    }
+    });
 
     return (
         <div className="mx-auto flex max-w-4xl flex-col gap-8 px-8 py-8 md:flex-row">
@@ -306,9 +305,9 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
                         id="logodropzone"
                         width={512}
                         height={512}
-                        className={'aspect-square w-40 md:w-full'}
-                        url={'/api/logo/upload'}
-                        deleteUrl={'/api/logo/delete'}
+                        className="aspect-square w-40 md:w-full"
+                        url="/api/logo/upload"
+                        deleteUrl="/api/logo/delete"
                         defaultUrl={project.logo?.url ?? undefined}
                     />
 
@@ -443,9 +442,9 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
                         id="bannerdropbox"
                         width={1280}
                         height={720}
-                        className={'aspect-video w-full '}
-                        url={'/api/banner/upload'}
-                        deleteUrl={'/api/banner/delete'}
+                        className="aspect-video w-full "
+                        url="/api/banner/upload"
+                        deleteUrl="/api/banner/delete"
                         defaultUrl={project.banner?.url ?? undefined}
                     />
                     <label
@@ -541,6 +540,7 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
                                         }}
                                     />
                                     <button
+                                        type="button"
                                         className="flex items-center rounded-r-lg bg-red-700 p-2 font-medium hover:bg-red-800 focus:outline-none focus:ring-4 focus:ring-red-400"
                                         onClick={() => {
                                             deleteExtraLink(key);

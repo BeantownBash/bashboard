@@ -6,10 +6,13 @@ export enum CheckboxState {
     INDETERMINATE,
 }
 
-const IndeterminateCheckbox: React.FC<any> = (props: {
+export default function IndeterminateCheckbox(props: {
+    id?: string;
+    className?: string;
     value: CheckboxState;
-}) => {
-    const { value, ...otherProps } = props;
+    [key: string]: any;
+}) {
+    const { value, id, className, ...otherProps } = props;
     const checkRef = React.useRef<HTMLInputElement>(null);
     React.useEffect(() => {
         if (!checkRef.current) {
@@ -19,7 +22,13 @@ const IndeterminateCheckbox: React.FC<any> = (props: {
         checkRef.current.checked = value === CheckboxState.CHECKED;
         checkRef.current.indeterminate = value === CheckboxState.INDETERMINATE;
     }, [value]);
-    return <input type="checkbox" ref={checkRef} {...otherProps} />;
-};
-
-export default IndeterminateCheckbox;
+    return (
+        <input
+            id={id}
+            className={className}
+            type="checkbox"
+            ref={checkRef}
+            {...otherProps}
+        />
+    );
+}

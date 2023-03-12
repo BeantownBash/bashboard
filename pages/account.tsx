@@ -69,7 +69,7 @@ export default function Account({
         try {
             await axios.post('/api/account', { name });
         } catch (error) {
-            console.log(error);
+            console.error(error);
             alert('Something went wrong. Please try again later.');
         }
     };
@@ -80,7 +80,7 @@ export default function Account({
                 await axios.post('/api/projects/leave');
                 router.push('/');
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 alert('Something went wrong. Please try again later.');
             }
         }

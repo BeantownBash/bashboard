@@ -3,7 +3,6 @@ import * as fs from 'fs';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '../auth/[...nextauth]';
 import prisma from '@/lib/prisma';
-import { Year } from '@prisma/client';
 
 export default async function handler(
     req: NextApiRequest,
