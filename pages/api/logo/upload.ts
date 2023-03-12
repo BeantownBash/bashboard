@@ -95,7 +95,7 @@ export default async function handler(
             }).pipe(fileStream);
             if (successful) {
                 res.status(200).json({
-                    url: `http://localhost:3000/api/res/images/${id}`,
+                    url: `${baseUrl}/api/res/images/${id}`,
                 });
             }
         }
