@@ -10,6 +10,7 @@ import { VoteDataWithProjects } from '@/types/VoteData';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import prisma from '@/lib/prisma';
 import Button from '@/components/Button';
+import { TagStrings } from '@/lib/textutils';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { id } = context.query;
@@ -112,6 +113,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     title: project.title,
                     tagline: project.tagline,
                     description: project.description,
+                    tags: project.tags,
                     githubLink: project.githubLink,
                     websiteLink: project.websiteLink,
                     videoLink: project.videoLink,
@@ -175,7 +177,7 @@ export default function InspectVote({
                             {vote.voteFor.map((project) => (
                                 <button
                                     type="button"
-                                    className="flex cursor-pointer flex-col items-stretch justify-center gap-4 rounded-lg border border-zinc-400 bg-zinc-700 px-4 py-4 transition-shadow hover:shadow-lg hover:shadow-zinc-400/20"
+                                    className="flex cursor-pointer flex-col items-stretch justify-start gap-4 rounded-lg border border-zinc-400 bg-zinc-700 px-4 py-4 transition-shadow hover:shadow-lg hover:shadow-zinc-400/20"
                                     key={project.id}
                                     onClick={() => {
                                         window.open(
@@ -206,7 +208,7 @@ export default function InspectVote({
                                                 />
                                             )}
                                         </div>
-                                        <div className="flex flex-1 flex-col">
+                                        <div className="flex flex-1 flex-col items-start">
                                             <p className="mb-1 font-display text-2xl font-semibold">
                                                 {project.title}
                                             </p>
@@ -218,6 +220,18 @@ export default function InspectVote({
                                                 )}
                                         </div>
                                     </div>
+                                    {project.tags.length > 0 && (
+                                        <div className="flex flex-wrap gap-1">
+                                            {project.tags.map((tag) => (
+                                                <div
+                                                    key={tag}
+                                                    className={`${TagStrings[tag].color} rounded-full py-1 px-6`}
+                                                >
+                                                    {TagStrings[tag].name}
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                 </button>
                             ))}
                         </div>

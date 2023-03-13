@@ -1,4 +1,4 @@
-import { ExtraLink, Year } from '@prisma/client';
+import { ExtraLink, Tag, Year } from '@prisma/client';
 import { BannerImageData, LogoImageData } from './ImageData';
 import { BasicUserData } from './UserData';
 
@@ -12,6 +12,7 @@ export type LightProjectData = {
     title: string;
     tagline: string | null;
     description: string | null;
+    tags: Tag[];
     githubLink: string | null;
     videoLink: string | null;
     websiteLink: string | null;
@@ -33,6 +34,7 @@ export type ProjectData = {
     title: string;
     tagline: string | null;
     description: string | null;
+    tags: Tag[];
     year: Year;
     githubLink: string | null;
     videoLink: string | null;
@@ -48,6 +50,7 @@ export type ProjectDataWithInvites = {
     title: string;
     tagline: string | null;
     description: string | null;
+    tags: Tag[];
     year: Year;
     githubLink: string | null;
     videoLink: string | null;

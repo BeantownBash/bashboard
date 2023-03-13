@@ -10,6 +10,13 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+enum Tag {
+    RefryRehash
+    NewConnect
+    SmallData
+    Other
+}
+
 model SystemConfigSetting {
     key   String @id
     value Json
@@ -79,7 +86,10 @@ model Project {
     tagline     String?
     description String?
     members     User[]
-    year        Year
+
+    tags Tag[]
+
+    year Year
 
     githubLink  String?
     videoLink   String?

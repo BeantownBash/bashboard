@@ -7,6 +7,7 @@ import prisma from '@/lib/prisma';
 import { ProjectData } from '@/types/ProjectData';
 import { selectRandomPlaceholder } from '@/lib/utils';
 import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
+import { TagStrings } from '@/lib/textutils';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { id } = context.query;
@@ -41,6 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                       title: project.title,
                       tagline: project.tagline,
                       description: project.description,
+                      tags: project.tags,
                       extraLinks: project.extraLinks,
                       githubLink: project.githubLink,
                       websiteLink: project.websiteLink,
@@ -108,7 +110,7 @@ export default function Project({ project }: { project: ProjectData }) {
             </Link>
             <div className="flex flex-col gap-8 md:flex-row">
                 <aside className="flex flex-none flex-col gap-8 sm:max-md:flex-row md:w-52">
-                    <div className="mx-auto aspect-square w-40 overflow-hidden rounded-2xl bg-teal-200/50 md:w-full">
+                    <div className="mx-auto aspect-square overflow-hidden rounded-2xl bg-teal-200/50">
                         {project.logo ? (
                             <Image
                                 src={project.logo.url}
@@ -127,6 +129,19 @@ export default function Project({ project }: { project: ProjectData }) {
                             />
                         )}
                     </div>
+
+                    {project.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                            {project.tags.map((tag) => (
+                                <div
+                                    key={tag}
+                                    className={`${TagStrings[tag].color} rounded-full py-1 px-6`}
+                                >
+                                    {TagStrings[tag].name}
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
                     <div className="flex flex-1 flex-col gap-8">
                         <div className="flex flex-col gap-2">

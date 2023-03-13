@@ -2,10 +2,13 @@ import { GetServerSideProps } from 'next';
 import { BsGithub, BsLink45Deg, BsYoutube } from 'react-icons/bs';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
+import React from 'react';
+import { Tag } from '@prisma/client';
 import Button from '@/components/Button';
 import prisma from '@/lib/prisma';
 import { LightProjectData } from '@/types/ProjectData';
 import { selectRandomPlaceholder } from '@/lib/utils';
+import { TagStrings } from '@/lib/textutils';
 
 export const getServerSideProps: GetServerSideProps = async () => {
     const projects = await prisma.project.findMany({
@@ -23,21 +26,24 @@ export const getServerSideProps: GetServerSideProps = async () => {
     return {
         props: {
             directoryEnabled: directoryEnabled ?? true,
-            projects: projects.map((project) => ({
-                id: project.id,
-                title: project.title,
-                tagline: project.tagline,
-                description: project.description,
-                githubLink: project.githubLink,
-                websiteLink: project.websiteLink,
-                videoLink: project.videoLink,
-                logo: project.logo
-                    ? {
-                          id: project.logo?.id,
-                          url: project.logo?.url,
-                      }
-                    : null,
-            })),
+            projects: directoryEnabled
+                ? projects.map((project) => ({
+                      id: project.id,
+                      title: project.title,
+                      tagline: project.tagline,
+                      description: project.description,
+                      tags: project.tags,
+                      githubLink: project.githubLink,
+                      websiteLink: project.websiteLink,
+                      videoLink: project.videoLink,
+                      logo: project.logo
+                          ? {
+                                id: project.logo?.id,
+                                url: project.logo?.url,
+                            }
+                          : null,
+                  }))
+                : [],
         },
     };
 };
@@ -50,6 +56,14 @@ export default function Projects({
     projects: LightProjectData[];
 }) {
     const router = useRouter();
+    const [selectedTag, setSelectedTag] = React.useState<Tag | null>(null);
+
+    const filteredProjects = React.useMemo(() => {
+        if (selectedTag === null) {
+            return projects;
+        }
+        return projects.filter((project) => project.tags.includes(selectedTag));
+    }, [projects, selectedTag]);
 
     return (
         <div className="mx-auto max-w-4xl px-8 py-8">
@@ -57,13 +71,58 @@ export default function Projects({
                 All Projects
             </h1>
 
+            {directoryEnabled && (
+                <div className="my-4">
+                    <span className="mr-4 font-medium">Filter: </span>
+                    <div className="inline-flex flex-wrap gap-4">
+                        {Object.entries(TagStrings).map(
+                            ([tag, { color, name }]) => {
+                                // show only selected tag if one is selected
+                                if (
+                                    selectedTag !== null &&
+                                    selectedTag !== tag
+                                ) {
+                                    return null;
+                                }
+
+                                return (
+                                    <label
+                                        className="relative inline-flex cursor-pointer items-center"
+                                        key={tag}
+                                    >
+                                        <input
+                                            type="checkbox"
+                                            value=""
+                                            className="peer sr-only"
+                                            checked={selectedTag === tag}
+                                            onChange={(e) => {
+                                                if (e.target.checked) {
+                                                    setSelectedTag(tag as Tag);
+                                                } else {
+                                                    setSelectedTag(null);
+                                                }
+                                            }}
+                                        />
+                                        <div
+                                            className={`${color} peer rounded-full py-1 px-6 peer-checked:ring-4 peer-checked:ring-teal-400 peer-focus:outline-none`}
+                                        >
+                                            {name}
+                                        </div>
+                                    </label>
+                                );
+                            },
+                        )}
+                    </div>
+                </div>
+            )}
+
             {directoryEnabled ? (
-                projects.length > 0 ? (
+                filteredProjects.length > 0 ? (
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        {projects.map((project) => (
+                        {filteredProjects.map((project) => (
                             <button
                                 type="button"
-                                className="flex cursor-pointer flex-col items-stretch justify-center gap-4 rounded-lg border border-zinc-400 bg-zinc-700 px-4 py-4 transition-shadow hover:shadow-lg hover:shadow-zinc-400/20"
+                                className="flex cursor-pointer flex-col items-stretch justify-start gap-4 rounded-lg border border-zinc-400 bg-zinc-700 px-4 py-4 transition-shadow hover:shadow-lg hover:shadow-zinc-400/20"
                                 key={project.id}
                                 onClick={() => {
                                     router.push(`/projects/${project.id}`);
@@ -91,7 +150,7 @@ export default function Projects({
                                             />
                                         )}
                                     </div>
-                                    <div className="flex flex-1 flex-col">
+                                    <div className="flex flex-1 flex-col items-start">
                                         <p className="mb-1 font-display text-2xl font-semibold">
                                             {project.title}
                                         </p>
@@ -103,6 +162,18 @@ export default function Projects({
                                             )}
                                     </div>
                                 </div>
+                                {project.tags.length > 0 && (
+                                    <div className="flex flex-wrap gap-1">
+                                        {project.tags.map((tag) => (
+                                            <div
+                                                key={tag}
+                                                className={`${TagStrings[tag].color} rounded-full py-1 px-6`}
+                                            >
+                                                {TagStrings[tag].name}
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                                 {(project.githubLink ||
                                     project.websiteLink ||
                                     project.videoLink) && (

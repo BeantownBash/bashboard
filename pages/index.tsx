@@ -24,6 +24,7 @@ import prisma from '@/lib/prisma';
 import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
 import Button from '@/components/Button';
 import { authOptions } from './api/auth/[...nextauth]';
+import { TagStrings } from '@/lib/textutils';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getServerSession(
@@ -96,6 +97,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                       title: user.project.title,
                       tagline: user.project.tagline,
                       description: user.project.description,
+                      tags: user.project.tags,
                       extraLinks: user.project.extraLinks,
                       githubLink: user.project.githubLink,
                       websiteLink: user.project.websiteLink,
@@ -311,14 +313,14 @@ export default function Home({
     return (
         <div className="mx-auto flex max-w-4xl flex-col gap-8 px-8 py-8 md:flex-row">
             <aside className="flex flex-none flex-col gap-8 sm:max-md:flex-row md:w-52">
-                <div className="mx-auto aspect-square w-40 overflow-hidden rounded-2xl bg-teal-200/50 md:w-full">
+                <div className="mx-auto aspect-square overflow-hidden rounded-2xl bg-teal-200/50">
                     {project.logo ? (
                         <Image
                             src={project.logo.url}
                             alt=""
                             width={512}
                             height={512}
-                            className="h-full w-full object-contain"
+                            className="h-full w-full object-cover"
                         />
                     ) : (
                         <Image
@@ -326,7 +328,7 @@ export default function Home({
                             alt=""
                             width={512}
                             height={512}
-                            className="h-full w-full object-contain"
+                            className="h-full w-full object-cover"
                         />
                     )}
                 </div>
@@ -335,6 +337,19 @@ export default function Home({
                     <Link href="/edit">
                         <Button className="w-full">Edit</Button>
                     </Link>
+
+                    {project.tags.length > 0 && (
+                        <div className="flex flex-wrap gap-1">
+                            {project.tags.map((tag) => (
+                                <div
+                                    key={tag}
+                                    className={`${TagStrings[tag].color} rounded-full py-1 px-6`}
+                                >
+                                    {TagStrings[tag].name}
+                                </div>
+                            ))}
+                        </div>
+                    )}
 
                     <div className="flex flex-col gap-2">
                         {project.githubLink && (

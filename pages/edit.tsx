@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
+import { Tag } from '@prisma/client';
 import { generateRandomKey } from '@/lib/utils';
 import MarkdownWithPlugins from '@/components/MarkdownWithPlugins';
 import ImageDropzone from '@/components/ImageDropzone';
@@ -17,6 +18,7 @@ import Button from '@/components/Button';
 import prisma from '@/lib/prisma';
 import { authOptions } from './api/auth/[...nextauth]';
 import { ProjectDataWithInvites } from '@/types/ProjectData';
+import { TagStrings } from '@/lib/textutils';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getServerSession(
@@ -83,6 +85,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 title: project.title,
                 tagline: project.tagline,
                 description: project.description,
+                tags: project.tags,
                 extraLinks: project.extraLinks,
                 githubLink: project.githubLink,
                 websiteLink: project.websiteLink,
@@ -122,6 +125,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 export default function Edit({ project }: { project: ProjectDataWithInvites }) {
     const [projectTitle, setProjectTitle] = React.useState(project.title ?? '');
     const [tagline, setTagline] = React.useState(project.tagline ?? '');
+    const [tags, setTags] = React.useState(project.tags);
     const [projectDescription, setProjectDescription] = React.useState(
         project.description ?? '',
     );
@@ -235,6 +239,7 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
                 title: projectTitle,
                 tagline,
                 description: projectDescription,
+                tags,
                 githubLink,
                 websiteLink,
                 videoLink,
@@ -305,7 +310,7 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
                         id="logodropzone"
                         width={512}
                         height={512}
-                        className="aspect-square w-40 md:w-full"
+                        className="aspect-square"
                         url="/api/logo/upload"
                         deleteUrl="/api/logo/delete"
                         defaultUrl={project.logo?.url ?? undefined}
@@ -387,6 +392,48 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
                             setTagline(e.target.value.substring(0, 32))
                         }
                     />
+                </div>
+
+                <div className="mb-8">
+                    <label
+                        htmlFor="tagline"
+                        className=" block font-medium text-white"
+                    >
+                        Project Tags
+                    </label>
+                    <div className="my-2 flex flex-wrap gap-4">
+                        {Object.entries(TagStrings).map(
+                            ([tag, { color, name }]) => (
+                                <label
+                                    className="relative inline-flex cursor-pointer items-center"
+                                    key={tag}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        value=""
+                                        className="peer sr-only"
+                                        checked={tags.includes(tag as Tag)}
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setTags([...tags, tag as Tag]);
+                                            } else {
+                                                setTags(
+                                                    tags.filter(
+                                                        (tagF) => tagF !== tag,
+                                                    ),
+                                                );
+                                            }
+                                        }}
+                                    />
+                                    <div
+                                        className={`${color} peer rounded-full py-1 px-6 peer-checked:ring-4 peer-checked:ring-teal-400 peer-focus:outline-none`}
+                                    >
+                                        {name}
+                                    </div>
+                                </label>
+                            ),
+                        )}
+                    </div>
                 </div>
 
                 <div className="mb-8">

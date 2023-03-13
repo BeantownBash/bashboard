@@ -82,6 +82,10 @@ export default async function handler(
                     req.body.description && req.body.description.length > 0
                         ? req.body.description
                         : null,
+                tags:
+                    req.body.tags && req.body.tags.length > 0
+                        ? req.body.tags
+                        : [],
                 githubLink:
                     req.body.githubLink && req.body.githubLink.length > 0
                         ? req.body.githubLink
