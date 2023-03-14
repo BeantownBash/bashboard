@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { BsArrowRight } from 'react-icons/bs';
+import { Prisma } from '@prisma/client';
 import { BasicUserData } from '@/types/UserData';
 import prisma from '@/lib/prisma';
 import Button from '@/components/Button';
@@ -33,6 +34,41 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         return {
             notFound: true,
         };
+    }
+
+    // If this is the first user OR is on the admin list, make them an admin
+    const userCount = await prisma.user.count();
+    const adminUsers =
+        ((
+            await prisma.systemConfigSetting.findUnique({
+                where: { key: 'adminUsers' },
+            })
+        )?.value as Prisma.JsonArray) ?? [];
+
+    // are they in the list
+    if (adminUsers.includes(user.email)) {
+        await prisma.user.update({
+            where: { id: user.id },
+            data: { isAdmin: true },
+        });
+    } else if (userCount === 1) {
+        // then are they the first user
+        await prisma.user.update({
+            where: { id: user.id },
+            data: { isAdmin: true },
+        });
+
+        // add this user to the admin list too
+        await prisma.systemConfigSetting.upsert({
+            where: { key: 'adminUsers' },
+            update: {
+                value: [user.email],
+            },
+            create: {
+                key: 'adminUsers',
+                value: [user.email],
+            },
+        });
     }
 
     if (user.name && user.name.length > 0) {
