@@ -107,7 +107,7 @@ export default function Header() {
 
                     {session ? (
                         <Link href="/account">
-                            <Button colorType="gray">
+                            <Button colorType="gray" fullWidth>
                                 <BsPersonCircle className="inline-block h-6 w-6" />
                                 <span className="sr-only">Account</span>
                             </Button>
@@ -117,6 +117,7 @@ export default function Header() {
                             onClick={() => {
                                 signIn(undefined, { callbackUrl: '/welcome' });
                             }}
+                            fullWidth
                         >
                             Sign In
                         </Button>
