@@ -105,7 +105,7 @@ export default function Votes({ votes }: { votes: BasicVoteData[] }) {
                                         {vote.title}
                                     </p>
                                 </div>
-                                <div className="flex flex-row items-center gap-2">
+                                <div className="flex flex-col items-center gap-2 sm:flex-row">
                                     {vote.open ? '(Open)' : '(Closed)'}
                                     <Link
                                         className="ml-4"
