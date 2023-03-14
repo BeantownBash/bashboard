@@ -89,8 +89,9 @@ export default function Projects({
             {projects.length > 0 ? (
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     {projects.map((project) => (
-                        <button
-                            type="button"
+                        // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-noninteractive-element-interactions
+                        <div
+                            role="article"
                             className="flex cursor-pointer flex-col items-stretch justify-start gap-4 rounded-lg border border-zinc-400 bg-zinc-700 px-4 py-4 transition-shadow hover:shadow-lg hover:shadow-zinc-400/20"
                             key={project.id}
                             onClick={() => {
@@ -188,7 +189,7 @@ export default function Projects({
                                     )}
                                 </div>
                             )}
-                        </button>
+                        </div>
                     ))}
                 </div>
             ) : (
