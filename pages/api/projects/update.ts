@@ -76,7 +76,7 @@ export default async function handler(
                         : 'Untitled Project',
                 tagline:
                     req.body.tagline && req.body.tagline.length > 0
-                        ? req.body.tagline.substring(0, 32)
+                        ? req.body.tagline.substring(0, 72)
                         : null,
                 description:
                     req.body.description && req.body.description.length > 0

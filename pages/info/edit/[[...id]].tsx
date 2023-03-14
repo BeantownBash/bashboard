@@ -139,14 +139,21 @@ export default function Edit({ post }: { post?: PostData }) {
                 >
                     Post Title
                 </label>
-                <input
-                    type="text"
-                    id="projecttitle"
-                    placeholder="ex. A guide to Markdown"
-                    className="block w-full rounded-lg border border-zinc-600 bg-zinc-800 p-2.5 font-display text-xl font-extrabold text-white placeholder-zinc-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-500"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value.substring(0, 32))}
-                />
+                <div className="relative">
+                    <input
+                        type="text"
+                        id="projecttitle"
+                        placeholder="ex. A guide to Markdown"
+                        className="block w-full rounded-lg border border-zinc-600 bg-zinc-800 p-2.5 font-display text-xl font-extrabold text-white placeholder-zinc-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-500"
+                        value={title}
+                        onChange={(e) =>
+                            setTitle(e.target.value.substring(0, 32))
+                        }
+                    />
+                    <span className="absolute right-2 bottom-1 text-xs text-zinc-300">
+                        {title.length}/32
+                    </span>
+                </div>
             </div>
 
             <div className="mb-8">

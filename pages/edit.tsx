@@ -357,16 +357,21 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
                     >
                         Come up with something catchy, but descriptive.
                     </label>
-                    <input
-                        type="text"
-                        id="projecttitle"
-                        placeholder="ex. StarNet"
-                        className="block w-full rounded-lg border border-zinc-600 bg-zinc-800 p-2.5 font-display text-xl font-extrabold text-white placeholder-zinc-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-500"
-                        value={projectTitle}
-                        onChange={(e) =>
-                            setProjectTitle(e.target.value.substring(0, 32))
-                        }
-                    />
+                    <div className="relative">
+                        <input
+                            type="text"
+                            id="projecttitle"
+                            placeholder="ex. StarNet"
+                            className="block w-full rounded-lg border border-zinc-600 bg-zinc-800 p-2.5 font-display text-xl font-extrabold text-white placeholder-zinc-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-500"
+                            value={projectTitle}
+                            onChange={(e) =>
+                                setProjectTitle(e.target.value.substring(0, 32))
+                            }
+                        />
+                        <span className="absolute right-2 bottom-1 text-xs text-zinc-300">
+                            {projectTitle.length}/32
+                        </span>
+                    </div>
                 </div>
 
                 <div className="mb-8">
@@ -382,16 +387,21 @@ export default function Edit({ project }: { project: ProjectDataWithInvites }) {
                     >
                         An optional brief description.
                     </label>
-                    <input
-                        type="text"
-                        id="tagline"
-                        placeholder="ex. A new way to connect with the stars."
-                        className="block w-full rounded-lg border border-zinc-600 bg-zinc-800 p-2.5 font-sans font-semibold text-white placeholder-zinc-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-500"
-                        value={tagline}
-                        onChange={(e) =>
-                            setTagline(e.target.value.substring(0, 32))
-                        }
-                    />
+                    <div className="relative">
+                        <input
+                            type="text"
+                            id="tagline"
+                            placeholder="ex. A new way to connect with the stars."
+                            className="block w-full rounded-lg border border-zinc-600 bg-zinc-800 p-2.5 font-sans font-semibold text-white placeholder-zinc-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-500"
+                            value={tagline}
+                            onChange={(e) =>
+                                setTagline(e.target.value.substring(0, 72))
+                            }
+                        />
+                        <span className="absolute right-2 bottom-1 text-xs text-zinc-300">
+                            {tagline.length}/72
+                        </span>
+                    </div>
                 </div>
 
                 <div className="mb-8">

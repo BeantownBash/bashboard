@@ -95,14 +95,21 @@ export default function Account({ user }: { user: BasicUserData }) {
                 <label className="mb-2 block text-sm text-zinc-400">
                     You can change this at any time on your account page.
                 </label>
-                <input
-                    type="text"
-                    id="projecttitle"
-                    placeholder="ex. John Dymek Jacob"
-                    className="block w-full rounded-lg border border-zinc-600 bg-zinc-800 p-2.5 text-white placeholder-zinc-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-500"
-                    value={name}
-                    onChange={(e) => setName(e.target.value.substring(0, 32))}
-                />
+                <div className="relative">
+                    <input
+                        type="text"
+                        id="projecttitle"
+                        placeholder="ex. John Dymek Jacob"
+                        className="block w-full rounded-lg border border-zinc-600 bg-zinc-800 p-2.5 text-white placeholder-zinc-400 focus:border-teal-500 focus:ring-4 focus:ring-teal-500"
+                        value={name}
+                        onChange={(e) =>
+                            setName(e.target.value.substring(0, 32))
+                        }
+                    />
+                    <span className="absolute right-2 bottom-1 text-xs text-zinc-300">
+                        {name.length}/32
+                    </span>
+                </div>
             </div>
 
             <div className="mb-6">
