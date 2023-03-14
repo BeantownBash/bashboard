@@ -95,6 +95,7 @@ export default function ImageDropzone({
                     width={width}
                     height={height}
                     className="h-full w-full object-contain"
+                    loader={({ src }) => src}
                 />
             )}
             <div className="absolute inset-0 flex items-center justify-center bg-zinc-900/40 p-4 hover:bg-zinc-900/60">

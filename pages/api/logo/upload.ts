@@ -6,7 +6,6 @@ import { authOptions } from '../auth/[...nextauth]';
 import prisma from '@/lib/prisma';
 
 const maxSize = 5000000; // 5MB
-const baseUrl = process.env.IMG_BASEURL;
 
 export default async function handler(
     req: NextApiRequest,
@@ -69,7 +68,7 @@ export default async function handler(
             await prisma.logoImage.create({
                 data: {
                     id,
-                    url: `${baseUrl}/api/res/images/${id}`,
+                    url: `/api/res/images/${id}`,
                     projectId: session.user.projectId,
                 },
             });
@@ -95,7 +94,7 @@ export default async function handler(
             }).pipe(fileStream);
             if (successful) {
                 res.status(200).json({
-                    url: `${baseUrl}/api/res/images/${id}`,
+                    url: `/api/res/images/${id}`,
                 });
             }
         }

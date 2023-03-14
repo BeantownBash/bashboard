@@ -118,6 +118,7 @@ export default function Project({ project }: { project: ProjectData }) {
                                 width={512}
                                 height={512}
                                 className="h-full w-full object-contain"
+                                loader={({ src }) => src}
                             />
                         ) : (
                             <Image
@@ -126,6 +127,7 @@ export default function Project({ project }: { project: ProjectData }) {
                                 width={512}
                                 height={512}
                                 className="h-full w-full object-contain"
+                                loader={({ src }) => src}
                             />
                         )}
                     </div>
@@ -214,6 +216,7 @@ export default function Project({ project }: { project: ProjectData }) {
                                 width={1280}
                                 height={720}
                                 className="h-full w-full object-contain"
+                                loader={({ src }) => src}
                             />
                         </div>
                     )}
