@@ -17,6 +17,12 @@ enum Tag {
     Other
 }
 
+enum VoteType {
+    BreakoutRoom
+    Final
+    Other
+}
+
 model SystemConfigSetting {
     key   String @id
     value Json
@@ -35,6 +41,8 @@ model Vote {
 
     canVote Project[] @relation("CanVote")
     voteFor Project[] @relation("VoteFor")
+
+    type VoteType
 
     open Boolean @default(false)
 }

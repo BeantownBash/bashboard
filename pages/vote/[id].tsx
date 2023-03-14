@@ -10,7 +10,7 @@ import { VoteDataWithProjects } from '@/types/VoteData';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import prisma from '@/lib/prisma';
 import Button from '@/components/Button';
-import { TagStrings } from '@/lib/textutils';
+import { TagStrings, VoteTypeStrings } from '@/lib/textutils';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { id } = context.query;
@@ -124,6 +124,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                           }
                         : null,
                 })),
+                type: vote.type,
             },
         },
     };
@@ -149,6 +150,9 @@ export default function InspectVote({
         // @ts-ignore
         Tally.loadEmbeds();
     }, []);
+
+    const IconFunc = VoteTypeStrings[vote.type].icon;
+
     return (
         <>
             <div className="mx-auto max-w-7xl px-8 py-8">
@@ -163,9 +167,18 @@ export default function InspectVote({
                     </Button>
                 </Link>
 
-                <h1 className="mt-8 font-display text-4xl font-extrabold">
-                    {vote.title}
-                </h1>
+                <div className="mt-8 mb-4 flex flex-row items-center gap-4">
+                    <div
+                        className={`${
+                            VoteTypeStrings[vote.type].color
+                        } flex h-14 w-14 items-center justify-center rounded-lg`}
+                    >
+                        <IconFunc className="h-8 w-8" />
+                    </div>
+                    <h1 className="flex-1 font-display text-4xl font-extrabold">
+                        {vote.title}
+                    </h1>
+                </div>
                 <p className="mb-4">{vote.description}</p>
 
                 <div className="flex flex-col gap-8 lg:flex-row">

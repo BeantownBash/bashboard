@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getServerSession } from 'next-auth';
-import { Year } from '@prisma/client';
+import { VoteType, Year } from '@prisma/client';
 import { authOptions } from '../auth/[...nextauth]';
 import prisma from '@/lib/prisma';
 import { generateRandomKey } from '@/lib/utils';
@@ -78,6 +78,7 @@ export default async function handler(
                             })),
                         },
                     },
+                    type: req.body.type ?? VoteType.Other,
                 },
             });
         } else {
@@ -119,6 +120,7 @@ export default async function handler(
                             skipDuplicates: true,
                         },
                     },
+                    type: req.body.type ?? VoteType.Other,
                 },
             });
         }

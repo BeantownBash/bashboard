@@ -9,6 +9,7 @@ import Button from '@/components/Button';
 import prisma from '@/lib/prisma';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { VoteDataWithBallotsAndKeys } from '@/types/VoteData';
+import { VoteTypeStrings } from '@/lib/textutils';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const { id } = context.query;
@@ -99,6 +100,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 })),
                 open: vote.open,
                 ballots: vote.ballots,
+                type: vote.type,
             },
         },
     };
@@ -133,6 +135,8 @@ export default function InspectVote({
         }`;
     });
 
+    const IconFunc = VoteTypeStrings[vote.type].icon;
+
     return (
         <div className="mx-auto max-w-4xl px-8 py-8">
             <Link href="/vote">
@@ -163,9 +167,19 @@ export default function InspectVote({
                 Delete Vote
             </Button>
 
-            <h1 className="mt-8 font-display text-4xl font-extrabold">
-                {vote.title}
-            </h1>
+            <div className="mt-8 mb-4 flex flex-row items-center gap-4">
+                <div
+                    className={`${
+                        VoteTypeStrings[vote.type].color
+                    } flex h-14 w-14 items-center justify-center rounded-lg`}
+                >
+                    <IconFunc className="h-8 w-8" />
+                </div>
+                <h1 className="flex-1 font-display text-4xl font-extrabold">
+                    {vote.title}
+                </h1>
+            </div>
+
             <p className="mb-4">{vote.description}</p>
 
             <div className="mb-8 rounded-lg bg-zinc-800 p-4 ring-4 ring-indigo-400">

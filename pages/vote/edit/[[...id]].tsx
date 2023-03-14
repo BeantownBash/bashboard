@@ -4,6 +4,7 @@ import { getServerSession } from 'next-auth';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { BsDashCircleFill, BsSave } from 'react-icons/bs';
+import { VoteType } from '@prisma/client';
 import Button from '@/components/Button';
 import IndeterminateCheckbox, {
     CheckboxState,
@@ -12,6 +13,7 @@ import prisma from '@/lib/prisma';
 import { authOptions } from '@/pages/api/auth/[...nextauth]';
 import { BasicProjectData } from '@/types/ProjectData';
 import { VoteData } from '@/types/VoteData';
+import { VoteTypeStrings } from '@/lib/textutils';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getServerSession(
@@ -84,6 +86,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                           title: project.title,
                       })),
                       open: vote.open,
+                      type: vote.type,
                   }
                 : null,
             projects: projects.map((project) => ({
@@ -113,6 +116,7 @@ export default function EditVote({
     const [voteFor, setVoteFor] = React.useState(
         vote?.voteFor.map((project) => project.id) ?? [],
     );
+    const [type, setType] = React.useState<VoteType | null>(vote?.type ?? null);
 
     const router = useRouter();
     const discardChanges = () => {
@@ -136,6 +140,28 @@ export default function EditVote({
             return;
         }
 
+        if (!linkedForm || linkedForm.length === 0) {
+            alert(
+                'Please enter the ID of the linked Tally form for this vote.',
+            );
+            return;
+        }
+
+        if (!type) {
+            alert('Please select a type for this vote.');
+            return;
+        }
+
+        if (canVote.length === 0) {
+            alert('Please select at least one project that can vote.');
+            return;
+        }
+
+        if (voteFor.length === 0) {
+            alert('Please select at least one project that can be voted for.');
+            return;
+        }
+
         await axios
             .post('/api/votes/update', {
                 id: vote?.id,
@@ -145,6 +171,7 @@ export default function EditVote({
                 open,
                 canVote,
                 voteFor,
+                type,
             })
             .then(() => {
                 router.push('/vote');
@@ -242,6 +269,45 @@ export default function EditVote({
                         Open Vote
                     </span>
                 </label>
+            </div>
+
+            <hr className="my-6 h-px border-0 bg-zinc-600" />
+
+            <div>
+                <label className="mb-2 block font-medium text-white">
+                    Vote Type
+                </label>
+                <div className="inline-flex flex-wrap gap-4">
+                    {Object.entries(VoteTypeStrings).map(
+                        ([voteType, { color, name }]) => {
+                            return (
+                                <label
+                                    className="relative inline-flex cursor-pointer items-center"
+                                    key={voteType}
+                                >
+                                    <input
+                                        type="checkbox"
+                                        value=""
+                                        className="peer sr-only"
+                                        checked={type === voteType}
+                                        onChange={(e) => {
+                                            if (e.target.checked) {
+                                                setType(voteType as VoteType);
+                                            } else {
+                                                setType(null);
+                                            }
+                                        }}
+                                    />
+                                    <div
+                                        className={`${color} peer rounded-full bg-blue-700 py-1 px-6 peer-checked:ring-4 peer-checked:ring-teal-400 peer-focus:outline-none`}
+                                    >
+                                        {name}
+                                    </div>
+                                </label>
+                            );
+                        },
+                    )}
+                </div>
             </div>
 
             <hr className="my-6 h-px border-0 bg-zinc-600" />

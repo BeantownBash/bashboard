@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { Inter, Epilogue, Roboto_Mono } from '@next/font/google';
 import Header from '@/components/Header';
 import './globals.css';
+import './styles.css';
 import './markdownstyles.css';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' });

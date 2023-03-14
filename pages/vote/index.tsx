@@ -5,6 +5,7 @@ import Button from '@/components/Button';
 import prisma from '@/lib/prisma';
 import { SimpleBallot } from '@/types/VoteData';
 import { authOptions } from '../api/auth/[...nextauth]';
+import { VoteTypeStrings } from '@/lib/textutils';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
     const session = await getServerSession(
@@ -62,6 +63,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     id: ballot.vote.id,
                     title: ballot.vote.title,
                     open: ballot.vote.open,
+                    type: ballot.vote.type,
                 },
                 isCast: ballot.isCast,
             })),
@@ -99,6 +101,8 @@ export default function Votes({ ballots }: { ballots: SimpleBallot[] }) {
                             );
                         }
 
+                        const IconFunc = VoteTypeStrings[ballot.vote.type].icon;
+
                         return (
                             <div
                                 className={`flex flex-row items-center justify-between border border-zinc-400 bg-zinc-700 px-4 py-4 ${
@@ -110,9 +114,19 @@ export default function Votes({ ballots }: { ballots: SimpleBallot[] }) {
                                 }`}
                                 key={ballot.vote.id}
                             >
-                                <p className="text-xl font-medium">
-                                    {ballot.vote.title}
-                                </p>
+                                <div className="flex flex-row items-center gap-4">
+                                    <div
+                                        className={`${
+                                            VoteTypeStrings[ballot.vote.type]
+                                                .color
+                                        } flex h-14 w-14 items-center justify-center rounded-lg`}
+                                    >
+                                        <IconFunc className="h-8 w-8" />
+                                    </div>
+                                    <p className="flex-1 text-xl font-medium">
+                                        {ballot.vote.title}
+                                    </p>
+                                </div>
                                 <div className="flex flex-col gap-2 md:flex-row">
                                     {button}
                                 </div>

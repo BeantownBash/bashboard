@@ -1,9 +1,11 @@
+import { VoteType } from '@prisma/client';
 import { BasicProjectData, LightProjectData } from './ProjectData';
 
 export type BasicVoteData = {
     id: string;
     title: string;
     open: boolean;
+    type: VoteType;
 };
 
 export type VoteData = {
@@ -14,6 +16,7 @@ export type VoteData = {
     canVote: BasicProjectData[];
     voteFor: BasicProjectData[];
     open: boolean;
+    type: VoteType;
 };
 
 export type VoteDataWithBallotsAndKeys = {
@@ -25,6 +28,7 @@ export type VoteDataWithBallotsAndKeys = {
     voteFor: BasicProjectData[];
     open: boolean;
     ballots: BasicBallotData[];
+    type: VoteType;
 };
 
 export type VoteDataWithProjects = {
@@ -33,6 +37,7 @@ export type VoteDataWithProjects = {
     description: string;
     linkedForm: string;
     voteFor: LightProjectData[];
+    type: VoteType;
 };
 
 export type BasicBallotData = {
@@ -48,6 +53,7 @@ export type SimpleBallot = {
         id: string;
         title: string;
         open: boolean;
+        type: VoteType;
     };
     isCast: boolean;
 };
