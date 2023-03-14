@@ -45,7 +45,7 @@ export default async function handler(
 
         if (newAdminsCount !== req.body.length) {
             res.status(400).json({
-                e: 'Bad Request: Some emails are not valid.',
+                e: 'Bad Request: You can only add admin to accounts that already exist. Some emails are not valid.',
             });
             return;
         }
