@@ -106,7 +106,6 @@ export default function Projects({
                                             width={512}
                                             height={512}
                                             className="aspect-square h-full w-full rounded-2xl object-contain"
-                                            loader={({ src }) => src}
                                         />
                                     ) : (
                                         <Image
@@ -117,7 +116,6 @@ export default function Projects({
                                             width={512}
                                             height={512}
                                             className="aspect-square h-full w-full rounded-2xl object-contain"
-                                            loader={({ src }) => src}
                                         />
                                     )}
                                 </div>

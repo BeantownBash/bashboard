@@ -321,7 +321,6 @@ export default function Home({
                             width={512}
                             height={512}
                             className="h-full w-full object-cover"
-                            loader={({ src }) => src}
                         />
                     ) : (
                         <Image
@@ -330,7 +329,6 @@ export default function Home({
                             width={512}
                             height={512}
                             className="h-full w-full object-cover"
-                            loader={({ src }) => src}
                         />
                     )}
                 </div>
@@ -407,7 +405,6 @@ export default function Home({
                             width={1280}
                             height={720}
                             className="h-full w-full object-contain"
-                            loader={({ src }) => src}
                         />
                     </div>
                 )}

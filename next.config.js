@@ -12,6 +12,7 @@ const nextConfig = {
         //         pathname: '/api/res/images/**',
         //     },
         // ],
+        unoptimized: true,
     },
 };
 
