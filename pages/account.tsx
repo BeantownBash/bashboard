@@ -1,7 +1,3 @@
-import Button from '@/components/Button';
-import prisma from '@/lib/prisma';
-import { BasicUserData, BasicUserDataWithProjectId } from '@/types/UserData';
-import { User } from '@prisma/client';
 import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import { getServerSession } from 'next-auth';
@@ -9,6 +5,9 @@ import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { BsBoxArrowLeft, BsDashCircleFill, BsSave } from 'react-icons/bs';
+import Button from '@/components/Button';
+import prisma from '@/lib/prisma';
+import { BasicUserDataWithProjectId } from '@/types/UserData';
 import { authOptions } from './api/auth/[...nextauth]';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

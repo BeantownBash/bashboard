@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import * as fs from 'fs';
 import { getServerSession } from 'next-auth';
 import { Year } from '@prisma/client';
 import { authOptions } from '../auth/[...nextauth]';
