@@ -6,7 +6,7 @@ import { authOptions } from '../auth/[...nextauth]';
 import prisma from '@/lib/prisma';
 
 const maxSize = 5000000; // 5MB
-const baseUrl = 'http://localhost:3000';
+const baseUrl = process.env.IMG_BASEURL;
 
 export default async function handler(
     req: NextApiRequest,
