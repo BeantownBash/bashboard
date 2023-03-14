@@ -168,8 +168,28 @@ export default function InspectVote({
             </h1>
             <p className="mb-4">{vote.description}</p>
 
+            <div className="mb-8 rounded-lg bg-zinc-800 p-4 ring-4 ring-indigo-400">
+                <p className="block text-zinc-200">
+                    The linked form <strong>MUST</strong> include three hidden
+                    fields titled{' '}
+                    <code className="rounded bg-zinc-700 p-1">securityKey</code>
+                    , <code className="rounded bg-zinc-700 p-1">email</code>,
+                    and <code className="rounded bg-zinc-700 p-1">voteId</code>.
+                </p>
+                <p className="block text-zinc-200">
+                    This form must have a webhook integration pointed to{' '}
+                    <pre className="inline">
+                        <code className="rounded bg-zinc-700 p-1">
+                            https://my.beantownbash.org/api/votes/webhook
+                        </code>
+                    </pre>
+                    .
+                </p>
+            </div>
+
             <div>
                 <h2 className="mb-4 text-2xl font-medium">Votes Cast</h2>
+
                 <div className="text-xl">
                     <span className="rounded-lg border-2 border-teal-800 px-4 py-2">
                         {vote.ballots.reduce((accumulator, currentValue) => {

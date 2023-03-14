@@ -249,7 +249,7 @@ export default function EditVote({
             <div>
                 <label
                     htmlFor="linkedform"
-                    className=" block font-medium text-white"
+                    className="block font-medium text-white"
                 >
                     Linked Form
                 </label>
@@ -267,6 +267,27 @@ export default function EditVote({
                     value={linkedForm}
                     onChange={(e) => setLinkedForm(e.target.value)}
                 />
+                <div className="mt-4 rounded-lg bg-zinc-800 p-4 ring-4 ring-indigo-400">
+                    <p className="block text-zinc-200">
+                        The linked form <strong>MUST</strong> include three
+                        hidden fields titled{' '}
+                        <code className="rounded bg-zinc-700 p-1">
+                            securityKey
+                        </code>
+                        , <code className="rounded bg-zinc-700 p-1">email</code>
+                        , and{' '}
+                        <code className="rounded bg-zinc-700 p-1">voteId</code>.
+                    </p>
+                    <p className="block text-zinc-200">
+                        This form must have a webhook integration pointed to{' '}
+                        <pre className="inline">
+                            <code className="rounded bg-zinc-700 p-1">
+                                https://my.beantownbash.org/api/votes/webhook
+                            </code>
+                        </pre>
+                        .
+                    </p>
+                </div>
             </div>
 
             <hr className="my-6 h-px border-0 bg-zinc-600" />
