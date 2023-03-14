@@ -57,6 +57,20 @@ export default async function handler(
             return;
         }
 
+        // create admin list
+        await prisma.systemConfigSetting.upsert({
+            where: {
+                key: 'adminUsers',
+            },
+            create: {
+                key: 'adminUsers',
+                value: req.body,
+            },
+            update: {
+                value: req.body,
+            },
+        });
+
         await prisma.user.updateMany({
             where: {
                 email: { in: req.body },

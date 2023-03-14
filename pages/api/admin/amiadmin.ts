@@ -25,10 +25,21 @@ export default async function handler(
         }
 
         const userCount = await prisma.user.count();
+        const adminUsers = await prisma.systemConfigSetting.findUnique({
+            where: {
+                key: 'adminUsers',
+            },
+        });
 
-        if (userCount !== 1) {
+        // only allowed if ONLY 1 user exists or if the user is in the admin list
+        if (
+            userCount > 1 &&
+            (!adminUsers ||
+                !Array.isArray(adminUsers.value) ||
+                !adminUsers.value.includes(session.user.email))
+        ) {
             res.status(400).json({
-                e: 'Bad Request: This operation is only allowed when there is 1 user. You will have to edit the database directly to create an admin.',
+                e: 'Bad Request: This operation is only allowed when there is 1 user. You will have to be added to the admin user list or edit the database directly to create an admin.',
             });
             return;
         }

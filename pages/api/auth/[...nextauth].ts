@@ -41,9 +41,26 @@ export const authOptions = {
                 )?.value as Prisma.JsonArray) ?? [];
 
             if (email?.verificationRequest) {
-                if (userCount > 1 && !allowedUsers.includes(user.email)) {
+                // block them if more than one user signed in and they are not in the allowed list
+                // first user gets by and is added to the allowed list
+                if (userCount > 0 && !allowedUsers.includes(user.email)) {
                     return false;
                 }
+
+                // add this user to allowed users if they are first signin
+                if (!allowedUsers.includes(user.email)) {
+                    await prisma.systemConfigSetting.upsert({
+                        where: { key: 'allowedUsers' },
+                        update: {
+                            value: [user.email],
+                        },
+                        create: {
+                            key: 'allowedUsers',
+                            value: [user.email],
+                        },
+                    });
+                }
+
                 return true;
             }
             return true;
