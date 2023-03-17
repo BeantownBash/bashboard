@@ -75,9 +75,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
 
+    const allowEditing =
+        (await prisma.systemConfigSetting.findUnique({
+            where: {
+                key: 'allowEditing',
+            },
+        })) ?? true;
+
     return {
         props: {
             loggedIn: true,
+            allowEditing,
             user: {
                 id: user.id,
                 name: user.name || '',
@@ -127,10 +135,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function Home({
+    allowEditing,
     loggedIn,
     invites,
     project,
 }: {
+    allowEditing: boolean;
     loggedIn: boolean;
     invites: TeamInviteDataWithProject[];
     user?: BasicUserData;
@@ -215,24 +225,25 @@ export default function Home({
 
                 <p className="mb-4">You don&apos;t have a project yet.</p>
 
-                {!teamLoading ? (
-                    <button
-                        type="button"
-                        onClick={createProject}
-                        className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-emerald-700 px-8 py-8 text-2xl font-medium hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-400"
-                    >
-                        <BsPlusCircle className="mr-4 inline-block h-8 w-8" />
-                        Create a Project
-                    </button>
-                ) : (
-                    <button
-                        type="button"
-                        className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-emerald-700 px-8 py-8 text-2xl font-medium hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-400"
-                    >
-                        <BsArrowClockwise className="mr-4 inline-block h-8 w-8" />
-                        Loading...
-                    </button>
-                )}
+                {allowEditing &&
+                    (!teamLoading ? (
+                        <button
+                            type="button"
+                            onClick={createProject}
+                            className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-emerald-700 px-8 py-8 text-2xl font-medium hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-400"
+                        >
+                            <BsPlusCircle className="mr-4 inline-block h-8 w-8" />
+                            Create a Project
+                        </button>
+                    ) : (
+                        <button
+                            type="button"
+                            className="flex w-full cursor-pointer items-center justify-center rounded-lg bg-emerald-700 px-8 py-8 text-2xl font-medium hover:bg-emerald-800 focus:outline-none focus:ring-4 focus:ring-emerald-400"
+                        >
+                            <BsArrowClockwise className="mr-4 inline-block h-8 w-8" />
+                            Loading...
+                        </button>
+                    ))}
 
                 <h2 className="mt-6 font-display text-2xl font-semibold">
                     Project Invites
@@ -334,9 +345,11 @@ export default function Home({
                 </div>
 
                 <div className="flex flex-1 flex-col gap-8">
-                    <Link href="/edit">
-                        <Button className="w-full">Edit</Button>
-                    </Link>
+                    {allowEditing && (
+                        <Link href="/edit">
+                            <Button className="w-full">Edit</Button>
+                        </Link>
+                    )}
 
                     {project.tags.length > 0 && (
                         <div className="flex flex-wrap gap-1">
