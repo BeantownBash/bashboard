@@ -219,7 +219,7 @@ export default function Edit({ post }: { post?: PostData }) {
                         <textarea
                             id="projectdescription"
                             rows={20}
-                            className="block w-full border-none bg-zinc-800 p-2.5 text-white placeholder-zinc-400 focus:ring-0"
+                            className="block w-full border-none bg-zinc-800 p-2.5 text-white placeholder-zinc-400 outline-none focus:ring-0"
                             placeholder="ex. StarNet is a **brand new way** to connect with the stars."
                             value={content}
                             onChange={(e) => setContent(e.target.value)}

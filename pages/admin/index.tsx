@@ -62,7 +62,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-            forbidEditing: forbidEditing?.value ?? true,
+            forbidEditing: forbidEditing?.value ?? false,
             directoryDisabled: directoryDisabled?.value ?? false,
             allowedUsers: allowedUsers?.value ?? [],
             adminUsers: adminUsers.map((adminUser) => adminUser.email),

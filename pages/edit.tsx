@@ -42,7 +42,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         },
     });
 
-    if (forbidEditing) {
+    if (forbidEditing?.value === true) {
         return {
             redirect: {
                 destination: '/',

@@ -27,7 +27,7 @@ export default async function handler(
             },
         });
 
-        if (forbidEditing) {
+        if (forbidEditing?.value === true) {
             res.status(400).json({
                 e: 'Bad Request: Project editing is not currently allowed',
             });

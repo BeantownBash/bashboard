@@ -75,17 +75,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
 
-    const forbidEditing =
-        (await prisma.systemConfigSetting.findUnique({
-            where: {
-                key: 'forbidEditing',
-            },
-        })) ?? true;
+    const forbidEditing = await prisma.systemConfigSetting.findUnique({
+        where: {
+            key: 'forbidEditing',
+        },
+    });
 
     return {
         props: {
             loggedIn: true,
-            forbidEditing,
+            forbidEditing: forbidEditing?.value === true,
             user: {
                 id: user.id,
                 name: user.name || '',
