@@ -4,56 +4,76 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
 import { Tag } from '@prisma/client';
+import { getServerSession } from 'next-auth';
 import Button from '@/components/Button';
 import prisma from '@/lib/prisma';
 import { LightProjectData } from '@/types/ProjectData';
 import { selectRandomPlaceholder } from '@/lib/utils';
 import { TagStrings } from '@/lib/textutils';
+import { authOptions } from '../api/auth/[...nextauth]';
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const session = await getServerSession(
+        context.req,
+        context.res,
+        authOptions,
+    );
+
+    const user = await prisma.user.findUnique({
+        where: { email: session?.user?.email },
+    });
+
     const projects = await prisma.project.findMany({
         include: {
             logo: true,
         },
     });
 
-    const directoryEnabled = await prisma.systemConfigSetting.findUnique({
+    const directoryDisabled = await prisma.systemConfigSetting.findUnique({
         where: {
-            key: 'directoryEnabled',
+            key: 'directoryDisabled',
         },
     });
 
+    const directoryDisabledValue = directoryDisabled?.value ?? false;
+    const userIsAdminValue = user?.isAdmin ?? false;
+
     return {
         props: {
-            directoryEnabled: directoryEnabled ?? true,
-            projects: directoryEnabled
-                ? projects.map((project) => ({
-                      id: project.id,
-                      title: project.title,
-                      tagline: project.tagline,
-                      description: project.description,
-                      tags: project.tags,
-                      githubLink: project.githubLink,
-                      websiteLink: project.websiteLink,
-                      videoLink: project.videoLink,
-                      logo: project.logo
-                          ? {
-                                id: project.logo?.id,
-                                url: project.logo?.url,
-                            }
-                          : null,
-                  }))
-                : [],
+            directoryDisabled: directoryDisabledValue,
+            // show directory if user is an admin
+            projects:
+                !directoryDisabledValue || userIsAdminValue
+                    ? projects.map((project) => ({
+                          id: project.id,
+                          title: project.title,
+                          tagline: project.tagline,
+                          description: project.description,
+                          tags: project.tags,
+                          githubLink: project.githubLink,
+                          websiteLink: project.websiteLink,
+                          videoLink: project.videoLink,
+                          logo: project.logo
+                              ? {
+                                    id: project.logo?.id,
+                                    url: project.logo?.url,
+                                }
+                              : null,
+                      }))
+                    : [],
+            userIsAdmin: userIsAdminValue,
         },
     };
 };
 
 export default function Projects({
-    directoryEnabled,
+    directoryDisabled,
     projects,
+    userIsAdmin,
 }: {
-    directoryEnabled: boolean;
+    directoryDisabled: boolean;
     projects: LightProjectData[];
+    userIsAdmin: boolean;
 }) {
     const router = useRouter();
     const [selectedTag, setSelectedTag] = React.useState<Tag | null>(null);
@@ -65,13 +85,23 @@ export default function Projects({
         return projects.filter((project) => project.tags.includes(selectedTag));
     }, [projects, selectedTag]);
 
+    const showDirectory = !directoryDisabled || userIsAdmin;
+
     return (
         <div className="mx-auto max-w-4xl px-8 py-8">
             <h1 className="mb-4 font-display text-4xl font-extrabold">
                 All Projects
             </h1>
 
-            {directoryEnabled && (
+            {directoryDisabled && userIsAdmin && (
+                <div className="mb-4 rounded-xl border-4 border-indigo-700 py-2 px-4">
+                    The project directory is currently HIDDEN.
+                    <br />
+                    You are able to see it because you are an administrator.
+                </div>
+            )}
+
+            {showDirectory && (
                 <div className="my-4">
                     <span className="mr-4 font-medium">Filter: </span>
                     <div className="inline-flex flex-wrap gap-4">
@@ -116,7 +146,7 @@ export default function Projects({
                 </div>
             )}
 
-            {directoryEnabled ? (
+            {showDirectory ? (
                 filteredProjects.length > 0 ? (
                     <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                         {filteredProjects.map((project) => (

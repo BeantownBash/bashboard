@@ -36,15 +36,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
 
-    const directoryEnabled = await prisma.systemConfigSetting.findUnique({
+    const directoryDisabled = await prisma.systemConfigSetting.findUnique({
         where: {
-            key: 'directoryEnabled',
+            key: 'directoryDisabled',
         },
     });
 
-    const allowEditing = await prisma.systemConfigSetting.findUnique({
+    const forbidEditing = await prisma.systemConfigSetting.findUnique({
         where: {
-            key: 'allowEditing',
+            key: 'forbidEditing',
         },
     });
 
@@ -62,8 +62,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-            allowEditing: allowEditing?.value ?? true,
-            directoryEnabled: directoryEnabled?.value ?? true,
+            forbidEditing: forbidEditing?.value ?? true,
+            directoryDisabled: directoryDisabled?.value ?? false,
             allowedUsers: allowedUsers?.value ?? [],
             adminUsers: adminUsers.map((adminUser) => adminUser.email),
         },
@@ -71,21 +71,21 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function Admin({
-    allowEditing,
-    directoryEnabled,
+    forbidEditing,
+    directoryDisabled,
     allowedUsers,
     adminUsers,
 }: {
-    allowEditing?: boolean;
-    directoryEnabled?: boolean;
+    forbidEditing?: boolean;
+    directoryDisabled?: boolean;
     allowedUsers: string[];
     adminUsers: string[];
 }) {
-    const [allowEditingSetting, setAllowEditingSetting] = React.useState(
-        allowEditing ?? false,
+    const [forbidEditingSetting, setForbidEditingSetting] = React.useState(
+        forbidEditing ?? false,
     );
-    const [directoryEnabledSetting, setDirectoryEnabledSetting] =
-        React.useState(directoryEnabled ?? false);
+    const [directoryDisabledSetting, setDirectoryDisabledSetting] =
+        React.useState(directoryDisabled ?? false);
     const [allowedUsersSetting, setAllowedUsersSetting] = React.useState(
         allowedUsers.join('\n'),
     );
@@ -130,7 +130,7 @@ export default function Admin({
 
         try {
             await axios.post('/api/admin/directory', {
-                value: directoryEnabledSetting,
+                value: directoryDisabledSetting,
             });
         } catch (error: any) {
             console.error(error);
@@ -141,7 +141,7 @@ export default function Admin({
 
         try {
             await axios.post('/api/admin/editing', {
-                value: allowEditingSetting,
+                value: forbidEditingSetting,
             });
         } catch (error: any) {
             console.error(error);
@@ -175,18 +175,18 @@ export default function Admin({
                         type="checkbox"
                         value=""
                         className="peer sr-only"
-                        checked={allowEditingSetting}
+                        checked={forbidEditingSetting}
                         onChange={(e) =>
-                            setAllowEditingSetting(e.target.checked)
+                            setForbidEditingSetting(e.target.checked)
                         }
                     />
                     <div className="peer h-7 w-14 rounded-full border-zinc-600 bg-zinc-700 after:absolute after:top-0.5 after:left-[4px] after:h-6 after:w-6 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-teal-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-400" />
                     <span className="ml-3 font-medium text-zinc-300">
-                        Allow Project Editing
+                        Forbid Project Editing
                     </span>
                 </label>
                 <label className="mb-2 block text-sm text-zinc-400">
-                    Turn this off once hacking ends.
+                    Turn this on once hacking ends.
                 </label>
             </div>
 
@@ -198,19 +198,19 @@ export default function Admin({
                         type="checkbox"
                         value=""
                         className="peer sr-only"
-                        checked={directoryEnabledSetting}
+                        checked={directoryDisabledSetting}
                         onChange={(e) =>
-                            setDirectoryEnabledSetting(e.target.checked)
+                            setDirectoryDisabledSetting(e.target.checked)
                         }
                     />
                     <div className="peer h-7 w-14 rounded-full border-zinc-600 bg-zinc-700 after:absolute after:top-0.5 after:left-[4px] after:h-6 after:w-6 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-teal-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-teal-400" />
                     <span className="ml-3 font-medium text-zinc-300">
-                        Enable &quot;All Projects&quot; Directory
+                        Disable &quot;All Projects&quot; Directory
                     </span>
                 </label>
                 <label className="mb-2 block text-sm text-zinc-400">
-                    Keep this off during the event to keep ideas fresh. Turn it
-                    on once hacking is over.
+                    Keep this on during the event to keep ideas fresh. Turn it
+                    off once hacking is over.
                 </label>
             </div>
 

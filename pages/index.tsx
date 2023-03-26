@@ -75,17 +75,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
 
-    const allowEditing =
+    const forbidEditing =
         (await prisma.systemConfigSetting.findUnique({
             where: {
-                key: 'allowEditing',
+                key: 'forbidEditing',
             },
         })) ?? true;
 
     return {
         props: {
             loggedIn: true,
-            allowEditing,
+            forbidEditing,
             user: {
                 id: user.id,
                 name: user.name || '',
@@ -135,12 +135,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 };
 
 export default function Home({
-    allowEditing,
+    forbidEditing,
     loggedIn,
     invites,
     project,
 }: {
-    allowEditing: boolean;
+    forbidEditing: boolean;
     loggedIn: boolean;
     invites: TeamInviteDataWithProject[];
     user?: BasicUserData;
@@ -225,7 +225,7 @@ export default function Home({
 
                 <p className="mb-4">You don&apos;t have a project yet.</p>
 
-                {allowEditing &&
+                {!forbidEditing &&
                     (!teamLoading ? (
                         <button
                             type="button"
@@ -245,53 +245,61 @@ export default function Home({
                         </button>
                     ))}
 
-                <h2 className="mt-6 font-display text-2xl font-semibold">
-                    Project Invites
-                </h2>
-                <label className="mb-4 block text-sm text-zinc-400">
-                    Or wait patiently for someone to invite you to their
-                    project...
-                </label>
+                {!forbidEditing ? (
+                    <>
+                        <h2 className="mt-6 font-display text-2xl font-semibold">
+                            Project Invites
+                        </h2>
+                        <label className="mb-4 block text-sm text-zinc-400">
+                            Or wait patiently for someone to invite you to their
+                            project...
+                        </label>
 
-                {invites.length > 0 ? (
-                    <div className="flex flex-col">
-                        {invites.map((invite, index, array) => (
-                            <div
-                                className={`flex flex-row items-center justify-between border border-zinc-400 bg-zinc-700 px-4 py-4 ${
-                                    index === 0 ? 'rounded-t-lg' : ''
-                                } ${
-                                    index === array.length - 1
-                                        ? 'rounded-b-lg'
-                                        : ''
-                                }`}
-                                key={invite.id}
-                            >
-                                <p className="text-xl font-medium">
-                                    {invite.project.title}
-                                </p>
-                                <div className="flex flex-col gap-2 md:flex-row">
-                                    <Button
-                                        colorType="success"
-                                        onClick={() => {
-                                            acceptInvite(invite.id);
-                                        }}
+                        {invites.length > 0 ? (
+                            <div className="flex flex-col">
+                                {invites.map((invite, index, array) => (
+                                    <div
+                                        className={`flex flex-row items-center justify-between border border-zinc-400 bg-zinc-700 px-4 py-4 ${
+                                            index === 0 ? 'rounded-t-lg' : ''
+                                        } ${
+                                            index === array.length - 1
+                                                ? 'rounded-b-lg'
+                                                : ''
+                                        }`}
+                                        key={invite.id}
                                     >
-                                        <BsCheck className="inline-block h-8 w-8" />
-                                    </Button>
-                                    <Button
-                                        colorType="danger"
-                                        onClick={() => {
-                                            rejectInvite(invite.id);
-                                        }}
-                                    >
-                                        <BsX className="inline-block h-8 w-8" />
-                                    </Button>
-                                </div>
+                                        <p className="text-xl font-medium">
+                                            {invite.project.title}
+                                        </p>
+                                        <div className="flex flex-col gap-2 md:flex-row">
+                                            <Button
+                                                colorType="success"
+                                                onClick={() => {
+                                                    acceptInvite(invite.id);
+                                                }}
+                                            >
+                                                <BsCheck className="inline-block h-8 w-8" />
+                                            </Button>
+                                            <Button
+                                                colorType="danger"
+                                                onClick={() => {
+                                                    rejectInvite(invite.id);
+                                                }}
+                                            >
+                                                <BsX className="inline-block h-8 w-8" />
+                                            </Button>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
+                        ) : (
+                            <p className="mb-4">
+                                You don&apos;t have any invites yet.
+                            </p>
+                        )}
+                    </>
                 ) : (
-                    <p className="mb-4">You don&apos;t have any invites yet.</p>
+                    <p className="mb-4">Project editing is now disabled.</p>
                 )}
             </div>
         );
@@ -345,7 +353,7 @@ export default function Home({
                 </div>
 
                 <div className="flex flex-1 flex-col gap-8">
-                    {allowEditing && (
+                    {!forbidEditing && (
                         <Link href="/edit">
                             <Button className="w-full">Edit</Button>
                         </Link>

@@ -38,8 +38,8 @@ export default async function handler(
         }
 
         await prisma.systemConfigSetting.upsert({
-            where: { key: 'allowEditing' },
-            create: { key: 'allowEditing', value: req.body.value },
+            where: { key: 'forbidEditing' },
+            create: { key: 'forbidEditing', value: req.body.value },
             update: { value: req.body.value },
         });
 

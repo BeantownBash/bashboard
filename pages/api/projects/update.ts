@@ -21,13 +21,13 @@ export default async function handler(
             return;
         }
 
-        const allowEditing = await prisma.systemConfigSetting.findUnique({
+        const forbidEditing = await prisma.systemConfigSetting.findUnique({
             where: {
-                key: 'allowEditing',
+                key: 'forbidEditing',
             },
         });
 
-        if (!allowEditing) {
+        if (forbidEditing) {
             res.status(400).json({
                 e: 'Bad Request: Project editing is not currently allowed',
             });

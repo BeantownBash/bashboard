@@ -38,8 +38,8 @@ export default async function handler(
         }
 
         await prisma.systemConfigSetting.upsert({
-            where: { key: 'directoryEnabled' },
-            create: { key: 'directoryEnabled', value: req.body.value },
+            where: { key: 'directoryDisabled' },
+            create: { key: 'directoryDisabled', value: req.body.value },
             update: { value: req.body.value },
         });
 

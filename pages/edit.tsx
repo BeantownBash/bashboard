@@ -36,13 +36,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
 
-    const allowEditing = await prisma.systemConfigSetting.findUnique({
+    const forbidEditing = await prisma.systemConfigSetting.findUnique({
         where: {
-            key: 'allowEditing',
+            key: 'forbidEditing',
         },
     });
 
-    if (!allowEditing) {
+    if (forbidEditing) {
         return {
             redirect: {
                 destination: '/',
