@@ -60,12 +60,15 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         },
     });
 
+    const userCount = await prisma.user.count();
+
     return {
         props: {
             forbidEditing: forbidEditing?.value ?? false,
             directoryDisabled: directoryDisabled?.value ?? false,
             allowedUsers: allowedUsers?.value ?? [],
             adminUsers: adminUsers.map((adminUser) => adminUser.email),
+            userCount,
         },
     };
 };
@@ -75,11 +78,13 @@ export default function Admin({
     directoryDisabled,
     allowedUsers,
     adminUsers,
+    userCount,
 }: {
     forbidEditing?: boolean;
     directoryDisabled?: boolean;
     allowedUsers: string[];
     adminUsers: string[];
+    userCount: number;
 }) {
     const [forbidEditingSetting, setForbidEditingSetting] = React.useState(
         forbidEditing ?? false,
@@ -168,6 +173,17 @@ export default function Admin({
                 <BsSave className="mr-4 inline-block h-6 w-6" />
                 Save Changes
             </Button>
+
+            <div className="mb-6">
+                <div className="text-xl">
+                    <span className="mr-4">User Count:</span>
+                    <span className="rounded-lg border-2 border-teal-500 px-4 py-2">
+                        {userCount}
+                    </span>
+                </div>
+            </div>
+
+            <hr className="my-6 h-px border-0 bg-zinc-600" />
 
             <div className="mb-6">
                 <label className="relative inline-flex cursor-pointer items-center">
