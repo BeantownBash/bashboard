@@ -19,9 +19,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         authOptions,
     );
 
-    const user = await prisma.user.findUnique({
-        where: { email: session?.user?.email },
-    });
+    let user = null;
+    if (session?.user?.email) {
+        user = await prisma.user.findUnique({
+            where: { email: session?.user?.email },
+        });
+    }
 
     const projects = await prisma.project.findMany({
         include: {
