@@ -95,8 +95,7 @@ export default function Account({
                 <div className="mb-4 rounded-xl border-4 border-indigo-700 py-2 px-4">
                     You are an administrator. Administrator actions are purple.
                     <br />
-                    Go to &quot;My Project&quot; to access the administration
-                    panel.
+                    Go to &quot;Admin&quot; to access the administration panel.
                 </div>
             )}
 

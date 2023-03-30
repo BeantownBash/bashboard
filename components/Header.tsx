@@ -46,23 +46,41 @@ export default function Header() {
                     id="navbar-default"
                 >
                     <ul className="mt-4 flex flex-col gap-1 rounded border border-zinc-700 bg-zinc-900  p-4 md:mt-0 md:flex-row md:space-x-8 md:border-0 md:bg-transparent md:text-lg md:font-medium">
-                        {session && (
-                            <li>
-                                <Link
-                                    href="/"
-                                    className={`${
-                                        router.pathname === '/' ||
-                                        router.pathname === '/edit' ||
-                                        router.pathname === '/admin'
-                                            ? 'bg-teal-700 text-white hover:bg-teal-800'
-                                            : 'text-zinc-400 hover:bg-zinc-700 hover:text-white'
-                                    } block rounded py-2 pl-3 pr-4 md:bg-transparent md:p-0 md:hover:bg-transparent`}
-                                    aria-current="page"
-                                >
-                                    My Project
-                                </Link>
-                            </li>
-                        )}
+                        {session &&
+                            // the isAdmin property does exist
+                            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                            // @ts-ignore
+                            (session.user?.isAdmin ? (
+                                <li>
+                                    <Link
+                                        href="/admin"
+                                        className={`${
+                                            router.pathname === '/' ||
+                                            router.pathname === '/admin'
+                                                ? 'bg-teal-700 text-white hover:bg-teal-800'
+                                                : 'text-zinc-400 hover:bg-zinc-700 hover:text-white'
+                                        } block rounded py-2 pl-3 pr-4 md:bg-transparent md:p-0 md:hover:bg-transparent`}
+                                        aria-current="page"
+                                    >
+                                        Admin
+                                    </Link>
+                                </li>
+                            ) : (
+                                <li>
+                                    <Link
+                                        href="/"
+                                        className={`${
+                                            router.pathname === '/' ||
+                                            router.pathname === '/edit'
+                                                ? 'bg-teal-700 text-white hover:bg-teal-800'
+                                                : 'text-zinc-400 hover:bg-zinc-700 hover:text-white'
+                                        } block rounded py-2 pl-3 pr-4 md:bg-transparent md:p-0 md:hover:bg-transparent`}
+                                        aria-current="page"
+                                    >
+                                        My Project
+                                    </Link>
+                                </li>
+                            ))}
                         <li>
                             <Link
                                 href="/projects"
