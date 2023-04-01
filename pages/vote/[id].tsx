@@ -254,7 +254,9 @@ export default function InspectVote({
                             Vote
                         </h2>
                         <iframe
-                            data-tally-src={`https://tally.so/embed/3XLEOV?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&email=${encodeURIComponent(
+                            data-tally-src={`https://tally.so/embed/${encodeURIComponent(
+                                vote.linkedForm,
+                            )}?alignLeft=1&hideTitle=1&transparentBackground=1&dynamicHeight=1&email=${encodeURIComponent(
                                 userEmail,
                             )}&securityKey=${encodeURIComponent(
                                 securityKey,
